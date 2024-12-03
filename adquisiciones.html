@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adquisiciones</title>
+  <!-- Vinculación del archivo CSS externo -->
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/5e785129fd.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css"></link>
+    <link rel="stylesheet" href="style.css">
+
+    
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">EMAPP</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarScroll">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="equipos.html">Inventario Equipos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="convenios.html">Convenios Equipos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="ordenes-trabajo.html">Ordenes de Trabajo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="adquisiciones.html">Adquisición Equipos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="ordenes-mp-mc.html">MP-MC</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="proveedor.html">Proveedores</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="informes.html">Informes</a>
+                </li>
+            </ul>
+            <!-- Mueve este elemento al lado derecho usando 'ms-auto' -->
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="./login.html">Salir</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+  </nav>
+
+<!--  -->
+<div class="container-fluid my-4">
+    <h2 class="text-center">Planilla Aquisiciones de Equipos</h2>
+    </div>
+
+     <!-- Botón para añadir equipo -->
+            <div class="d-flex justify-content-between mt-3 mb-3">
+            <button class="btn btn-primary" id="add-item-btn" data-bs-toggle="modal" data-bs-target="#adquisicioesModal">Añadir adquisición</button>
+            <button class="btn btn-success" id="download-csv-adquisiciones">Descargar Planilla</button>
+    </div>
+
+
+
+
+ <!-- Modal para ingreso de datos-->
+ <div class="modal fade"  id="adquisicioesModal" tabindex="-1" aria-labelledby="adquisicioesModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl"> <!-- Clase para hacer el modal más grande -->
+      <div class="modal-content">
+          <div class="modal-header bg-dark text-light">
+              <h5 class="modal-title" id="adquisicioesModalLabel">Agregar Adquisición</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <form id="equipo-form">
+                  <div class="container-fluid">
+                      <div class="row g-3">
+
+                          <p class="bold-centered">Datos de adquisición</p>
+
+                          <!-- Columna 1 -->
+                          <!-- Ingreso Acreditacion-->
+                          <div class="col-md-4">
+                            <label for="estado_adquisiciones" class="form-label">Estado Adquisiciones</label>
+                            <select id="estado_adquisiciones" class="form-select">
+                              <option selected>Elija...</option>
+                              <option value="FINALIZADO">FINALIZADO</option>
+                              <option value="PENDIENTE">PENDIENTE</option>
+                              <option value="SIN INFORMACION">SIN INFORMACIóN</option>
+                            </select>
+                         </div>
+                         <!-- Ingreso Modalidad Compra-->
+                          <div class="col-md-4">
+                              <label for="modalidad_compra" class="form-label">Servicio Clínico</label>
+                              <input type="text" class="form-control" id="modalidad_compra" required>
+                          </div>
+                          <!-- Ingreso ID Licitacion-->
+                          <div class="col-md-4">
+                              <label for="id_licitacion" class="form-label">ID Licitacion</label>
+                              <input type="text" class="form-control" id="id_licitacion" required>
+                          </div>
+
+
+                          <!-- Columna 2 -->
+                          <!-- Ingreso Orden de Compra -->
+                          <div class="col-md-4">
+                              <label for="orden_compra" class="form-label">Orden Compra</label>
+                              <input type="text" class="form-control" id="orden_compra" required>
+                          </div>
+                          <!-- Ingreso Proveedor -->
+                          <div class="col-md-4">
+                              <label for="proveedor" class="form-label">Proveedor</label>
+                              <input type="text" class="form-control" id="proveedor" required>
+                          </div>
+                          <!-- Ingreso Valor Unitario -->
+                          <div class="col-md-4">
+                              <label for="valor_unitario_neto" class="form-label">Valor Unitario</label>
+                              <input type="text" class="form-control" id="valor_unitario_neto" required>
+                          </div>
+
+                          <hr class="thick-hr">
+                          <p class="bold-centered">Datos del equipo</p>
+
+                          <!-- Columna 3 -->
+                           <!-- Ingrese el Servicio Clinico -->
+                           <div class="col-md-4">
+                            <label for="servicio_clinico" class="form-label">Servicio Clinico</label>
+                            <input type="text" class="form-control" id="servicio_clinico" required>
+                          </div>
+                          <!-- Ingreso Nombre equipo -->
+                          <div class="col-md-4">
+                            <label for="nombre" class="form-label">Nombre Equipo</label>
+                            <input type="text" class="form-control" id="nombre" required>
+                        </div>
+                        <!-- Ingreso Marca -->
+                        <div class="col-md-4">
+                            <label for="marca" class="form-label">Marca</label>
+                            <input type="text" class="form-control" id="marca" required>
+                        </div>
+                        
+
+                          <!-- Columna 4 -->
+                          <!-- Ingreso Modelo -->
+                          <div class="col-md-4">
+                            <label for="modelo" class="form-label">Modelo</label>
+                            <input type="text" class="form-control" id="modelo" required>
+                         </div>
+                         <!-- Ingreso Numero Serie-->
+                         <div class="col-md-4">
+                          <label for="numero_serie" class="form-label">Numero Serie</label>
+                          <input type="text" class="form-control" id="numero_serie" required>
+                          </div>
+
+                          <hr class="thick-hr">
+                          <p class="bold-centered">Ingreso de equipo</p>
+
+                          <!-- Ingreso Acreditacion-->
+                          <div class="col-md-4">
+                            <label for="recepcionado_si_no" class="form-label">Recepcionado</label>
+                            <select id="recepcionado_si_no" class="form-select">
+                              <option selected>Elija...</option>
+                              <option value="SI">SI</option>
+                              <option value="NO">NO</option>
+                              <option value="PENDIENTE">PENDIENTE</option>
+                            </select>
+                         </div>
+
+
+                          <!-- Columna 5 -->
+                           <!-- Ingreso Fecha Real Entrega -->
+                          <div class="col-md-4">
+                              <label for="fecha_real_entrega" class="form-label">Fecha Real Entrega</label>
+                              <input type="date" class="form-control" id="fecha_real_entrega" required>
+                          </div>
+                          <!-- Ingreso Guia Despacho -->
+                          <div class="col-md-4">
+                              <label for="numero_guia_despacho" class="form-label">Numero Guia Despacho</label>
+                              <input type="text" class="form-control" id="numero_guia_despacho" required>
+                          </div>
+                          <!-- Ingreso Numero Factura -->                          
+                          <div class="col-md-4">
+                              <label for="numero_factura" class="form-label">Numero Factura</label>
+                              <input type="text" class="form-control" id="numero_factura" required>
+                          </div>
+
+                          <hr class="thick-hr">
+                         <p class="bold-centered">Carta Compromiso</p>
+                          <!-- Columna 6 -->
+                          <!-- Ingreso Carta Compromiso -->
+                          <div class="col-md-4">
+                            <label for="carta_compromiso" class="form-label">Carta Compromiso</label>
+                            <select id="carta_compromiso" class="form-select">
+                              <option selected>Elija...</option>
+                              <option value="SI">SI</option>
+                              <option value="NO">NO</option>
+                              <option value="N/A">N/A</option>
+                            </select>
+                         </div>
+
+                          <!-- Ingreso Pendientes Comprometidos -->
+                          <div class="col-md-4">
+                             <label for="pendientes_comprometidos" class="form-label">Pendientes Comprometidos</label>
+                             <input type="text" class="form-control" id="pendientes_comprometidos" required>
+                        </div>
+                          <!-- Ingreso Comprometida -->
+                          <div class="col-md-4">
+                            <label for="fecha_comprometida" class="form-label">Fecha Comprometida</label>
+                            <input type="date" class="form-control" id="fecha_comprometida" required>
+                        </div>
+
+                        <hr class="thick-hr">
+                         <p class="bold-centered">Post Venta</p>
+
+
+                          <!-- Columna 7 -->
+                          <!-- Ingreso EStado Instalacion -->
+                          <div class="col-md-4">
+                            <label for="estado_instalacion" class="form-label">Estado Instalacion</label>
+                            <select id="estado_instalacion" class="form-select">
+                              <option selected>Elija...</option>
+                              <option value="EJECUTADA">EJECUTADA</option>
+                              <option value="PENDIENTE">PENDIENTE</option>
+                              <option value="N/A">N/A</option>
+                            </select>
+                         </div>
+                          <!-- Ingreso Fecha Instalacion -->
+                          <div class="col-md-4">
+                            <label for="fecha_instalacion" class="form-label">Fecha Instalacion</label>
+                            <input type="date" class="form-control" id="fecha_instalacion" required>
+                         </div>
+                          <!-- Ingreso Estado Puesta en marcha -->
+                          <div class="col-md-4">
+                            <label for="estado_puesta_marcha" class="form-label">Estado Puesta en Marcha</label>
+                            <select id="estado_puesta_marcha" class="form-select">
+                              <option selected>Elija...</option>
+                              <option value="EJECUTADA">EJECUTADA</option>
+                              <option value="PENDIENTE">PENDIENTE</option>
+                              <option value="N/A">N/A</option>
+                            </select>
+                          </div>
+
+                          <!-- Columna 8 -->
+                          <!-- Ingreso Fecha Puesta en Marcha -->
+                          <div class="col-md-4">
+                            <label for="fecha_puesta_marcha" class="form-label">Fecha Instalacion</label>
+                            <input type="date" class="form-control" id="fecha_puesta_marcha" required>
+                         </div>
+                          <!-- Ingreso Estado Capacitacion -->
+                          <div class="col-md-4">
+                            <label for="estado_capacitacion" class="form-label">Estado Puesta en Marcha</label>
+                            <select id="estado_capacitacion" class="form-select">
+                              <option selected>Elija...</option>
+                              <option value="EJECUTADA">EJECUTADA</option>
+                              <option value="PENDIENTE">PENDIENTE</option>
+                              <option value="N/A">N/A</option>
+                            </select>
+                          </div>
+                          <!-- Ingreso Estado Puesta en marcha -->
+                          <div class="col-md-4">
+                            <label for="rcd_generada" class="form-label">RCD Generada</label>
+                            <select id="rcd_generada" class="form-select">
+                              <option selected>Elija...</option>
+                              <option value="SI">SI</option>
+                              <option value="NO">NO</option>
+                              <option value="N/A">N/A</option>
+                              <option value="PENDIENTE">PENDIENTE</option>
+                            </select>
+                          </div>
+
+                          <!-- Columna 9 -->
+                          <!-- Ingreso Fecha RCD -->
+                          <div class="col-md-4">
+                            <label for="fecha_rcd" class="form-label">Fecha RCD</label>
+                            <input type="date" class="form-control" id="fecha_rcd" required>
+                         </div>
+
+                         <hr class="thick-hr">
+                         <p class="bold-centered">Garantia</p>
+                         
+                          <!-- Ingreso Garantia en Meses -->
+                          <div class="col-md-4">
+                            <label for="garantia_meses" class="form-label">Garantia en Meses</label>
+                            <input type="number" class="form-control" id="garantia_meses" required>
+                        </div>
+                          <!-- Ingreso MP incluidos -->
+                          <div class="col-md-4">
+                            <label for="mp_incluidos" class="form-label">MP Incluidos</label>
+                            <input type="number" class="form-control" id="mp_incluidos" required>
+                        </div>
+
+                       
+                          <!-- Columna 10 -->
+                          <!-- Ingreso Fecha Termino Garantia -->
+                          <div class="col-md-4">
+                            <label for="fecha_termino_garantia" class="form-label">Fecha Termino Garantia</label>
+                            <input type="date" class="form-control" id="fecha_termino_garantia" required>
+                         </div>
+
+                         <hr class="thick-hr">
+                         <p class="bold-centered">Observaciones</p>
+
+                          <div class="col-md-12">
+                              <label for="observaciones" class="form-label"></label>
+                              <textarea class="form-control" id="observaciones" rows="3"></textarea>
+                          </div>
+                      </div>
+
+                      <div class="d-flex justify-content-center mt-4">
+                        <button id="saveadquisicionButton" type="button" class="btn btn-primary" data-action="add" data-id="">Guardar</button>
+                      </div>
+                  </div>
+              </form>
+          </div>
+      </div>
+  </div>
+</div>
+<!-- Ingreso de Convenios tabla  -->
+
+
+
+<div class="container-fluid my-4"> <!-- Cambiado a 'container-fluid' para que ocupe todo el ancho -->
+  <div class="row">
+      <div class="col-sm-12">
+          <table id="datatable_adquisiciones" class="table table-striped table-bordered">
+              <thead>
+                  <tr>
+
+                  <th>ID</th>
+                  <th>Estado Adquisiciones</th>
+                  <th>Modalidad Compra Adqusición</th>
+                  <th>ID Licitación</th>
+                  <th>Orden De Compra</th>
+                  <th>Proveedor</th>
+                  <th>Valor Unitario Neto</th>
+                  <th>Servicio Clinico</th>
+                  <th>Nombre</th>
+                  <th>Marca</th>
+                  <th>Modelo</th>
+                  <th>Numero Serie</th>
+                  <th>Recepcionado SI/NO</th>
+                  <th>Fecha Real Entrega</th>
+                  <th>N° Guia Despacho</th>
+                  <th>N° Factura</th>
+                  <th>Carta Compromiso</th>
+                  <th>Pendiente Comprometida (Referente carta)</th>
+                  <th>Fecha Comprometida</th>                        
+                  <th>Estado Instalacion</th>
+                  <th>Fecha Instalacion de Equipo</th>
+                  <th>Estado Puesta Macha Equipo</th>
+                  <th>Fecha Puesta Marcha Equipo</th>
+                  <th>Estado Capacitacion de Equipo</th>
+                  <th>RCD Generada</th>
+                  <th>Fecha RCD</th>
+                  <th>Garantia (meses)</th>
+                  <th>Mp Incluidos</th>
+                  <th>Fecha Termino Garantia</th>
+                  <th>Observaciones</th>
+                  <th>Opciones</th>
+
+            </tr>
+          </thead>
+          <tbody id="tableBody_adquisiciones"></tbody>
+     </table>
+  </div>
+</div>
+</div>
+
+
+    <!--Bootstrap-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!--JQuery-->
+   <script src ="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" ></script>
+   <!--Datatables-->
+   <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+   <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
+   <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+   <!-- Custom JS-->
+    <script src="main.js"></script>
+
+</body>
+</html>

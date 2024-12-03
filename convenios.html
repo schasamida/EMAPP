@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iniciar Sesión</title>
+  <!-- Vinculación del archivo CSS externo -->
+ 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <script src="https://kit.fontawesome.com/5e785129fd.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css"></link>
+    <link rel="stylesheet" href="style.css">
+
+    
+    
+
+
+     <!-- Bootstrap CSS -->
+  <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+  <script src="https://kit.fontawesome.com/5e785129fd.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="style.css">-->
+
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">EMAPP</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarScroll">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="equipos.html">Inventario Equipos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="convenios.html">Convenios Equipos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="ordenes-trabajo.html">Ordenes de Trabajo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="adquisiciones.html">Adquisición Equipos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="ordenes-mp-mc.html">MP-MC</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="proveedor.html">Proveedores</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="informes.html">Informes</a>
+                </li>
+            </ul>
+            <!-- Mueve este elemento al lado derecho usando 'ms-auto' -->
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="./login.html">Salir</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+  </nav>
+
+
+<!-- Ingreso de Convenios -->
+<!-- Contenido principal -->
+<div class="container-fluid my-4">
+    <h2 class="text-center">Planilla Convenios de Equipos </h2>
+    </div>
+
+     <!-- Botón para añadir equipo -->
+       <div class="table-responsive"> <!-- Activa el desplazamiento horizontal -->
+    <div class="d-flex justify-content-between mb-3" style="white-space: nowrap;">
+        <button class="btn btn-primary" id="add-item-btn" data-bs-toggle="modal" data-bs-target="#conveniosModal">Añadir Convenio</button>
+        <button class="btn btn-success" id="download-csv-convenios">Descargar Planilla</button>
+    </div>
+
+
+    <!-- Modal para ingreso de datos-->
+    <div class="modal fade"  id="conveniosModal" tabindex="-1" aria-labelledby="conveniosModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-xl"> <!-- Clase para hacer el modal más grande -->
+          <div class="modal-content">
+              <div class="modal-header bg-dark text-light">
+                  <h5 class="modal-title" id="conveniosModalLabel">Agregar Convenios</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                  <form id="convenios-form">
+                      <div class="container-fluid">
+                          <div class="row g-3">
+
+                              <!-- Columna 1 -->
+                            
+                              <!-- Ingreso Nombre equipo -->
+                          <div class="col-md-4">
+                              <label for="nombre" class="form-label">Nombre del equipo</label>
+                              <input type="text" class="form-control" id="nombre" required>
+                          </div>
+                          <!-- Ingreso Marca -->
+                          <div class="col-md-4">
+                              <label for="marca" class="form-label">Marca</label>
+                              <input type="text" class="form-control" id="marca" required>
+                          </div>
+                              <!-- Ingreso Modelo -->
+                            <div class="col-md-4">
+                              <label for="modelo" class="form-label">Modelo</label>
+                              <input type="text" class="form-control" id="modelo" required>
+                          </div>
+  
+
+                              <!-- Columna 2 -->
+                              <!-- Ingreso Acreditacion-->
+                            <div class="col-md-4">
+                              <label for="equipos_de_acreditacion" class="form-label">Equipo esta en acreditación</label>
+                              <select id="equipos_de_acreditacion" class="form-select" required>
+                                <option selected>Elija...</option>
+                                <option value="SI">SI</option>
+                                <option value="NO">NO</option>
+                                <option value="SIN INFORMACION">SIN INFORMACIóN</option>
+                              </select>
+                          </div>
+                             <!-- Ingreso Cantidad de Equipos-->
+                              <div class="col-md-4">
+                                  <label for="cantidad_equipos" class="form-label">Indique la cantidad de equipos</label>
+                                  <input type="number" class="form-control" id="cantidad_equipos" required>
+                              </div>
+                              <!-- Ingreso Cantidad MP  1 AÑO-->
+                              <div class="col-md-4">
+                                  <label for="cantidad_mp_1_ano" class="form-label">Cantidad MP 1 AÑO</label>
+                                  <input type="number" class="form-control" id="cantidad_mp_1_ano" required>
+                              </div>
+                        
+
+                              <!-- Columna 3 -->
+                              <!-- Ingreso Proveedor -->
+                            <div class="col-md-4">
+                              <label for="proveedor" class="form-label">Proveedor</label>
+                              <input type="text" class="form-control" id="proveedor" required>
+                          </div>
+                              <!-- Ingreso Acreditacion-->
+                            <div class="col-md-4">
+                              <label for="estado_convenio" class="form-label">Estado Convenio</label>
+                              <select id="estado_convenio" class="form-select" required>
+                                <option selected>Elija...</option>
+                                <option value="VENCIDO">VENCIDO</option>
+                                <option value="N/A">N/A</option>
+                                <option value="VIGENTE">VIGENTE</option>
+                                <option value="PENDIENTE">PENDIENTE</option>
+                                <option value="SIN CONVENIO">SIN CONVENIO</option>
+                                <option value="SIN INFORMACION">SIN INFORMACION</option>
+                              </select>
+                           </div>
+                           <!-- Ingreso Tipo De convenio-->
+                              <div class="col-md-4">
+                                  <label for="tipo_convenio" class="form-label">Tipo de Convenio</label>
+                                  <input type="text" class="form-control" id="tipo_convenio" required>
+                              </div>
+  
+
+                              <!-- Columna 4 -->
+                              <!--Ingreso Modalidad Servicio-->
+                             <div class="col-md-4">
+                              <label for="modalidad_compra" class="form-label">Modalidad Compra</label>
+                              <select id="modalidad_compra" class="form-select">
+                                <option selected>Elija...</option>
+                                <option value="SI">SI</option>
+                                <option value="NO">NO</option>  
+                                <option value="PENDIENTE">PENDIENTE</option>
+                                <option value="TRATO DIRECTO">TRATO DIRECTO</option> 
+                                <option value="COMODATO">COMODATO</option> 
+                                <option value="COMPRA AGIL">COMPRA AGIL</option> 
+                                <option value="GARANTÍA">GARANTÍA</option> 
+                                <option value="LICITACIÓN">LICITACIÓN</option> 
+
+
+
+                               </select>
+                            </div>
+                              <!--Ingreso ID OC--> 
+                              <div class="col-md-4">
+                                  <label for="id_oc" class="form-label">ID orden de compra</label>
+                                  <input type="text" class="form-control" id="id_oc" required>
+                              </div>
+                              <!--Ingreso duracion en meses--> 
+                              <div class="col-md-4">
+                                  <label for="duracion" class="form-label">Duracion del convenio en meses</label>
+                                  <input type="number" class="form-control" id="duracion" required>
+                              </div>
+  
+
+                              <!-- Columna 5 -->
+                              <!-- Ingreso Fecha Inicio Convenio -->
+                             <div class="col-md-4">
+                                 <label for="fecha_inicio_convenio" class="form-label">Fecha Inicio Convenio</label>
+                                 <input type="date" class="form-control" id="fecha_inicio_convenio" required>
+                           </div>
+                              <!-- Ingreso Termino Inicio Convenio -->
+                             <div class="col-md-4">
+                                 <label for="fecha_termino_convenio" class="form-label">Fecha Termino Convenio</label>
+                                 <input type="date" class="form-control" id="fecha_termino_convenio" required>
+                               </div>
+                               <!-- Ingreso Observaciones -->
+                             <div class="col-md-12">
+                                <label for="observaciones" class="form-label">Observaciones</label>
+                                <textarea class="form-control" id="observaciones" rows="3"></textarea>
+                            </div>
+                            
+                              
+                          </div>
+                          <div class="d-flex justify-content-center mt-4">
+                            <button id="saveConveniosButton" type="button" class="btn btn-primary" data-action="add" data-id="">Guardar</button>
+
+                            <!-- <button type="submit" class="btn btn-primary">Guardar</button>  -->
+                          </div>
+                      </div>
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
+
+
+
+<!-- Ingreso de Convenios tabla  -->
+
+<div class="container-fluid my-4"> <!-- Cambiado a 'container-fluid' para que ocupe todo el ancho -->
+    <div class="row">
+        <div class="col-sm-12">
+            <table id="datatable_users" class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th class="centered">ID</th>
+                        <th class="centered">Nombre</th>
+                        <th class="centered">Marca</th>
+                        <th class="centered">Modelo</th>
+                        <th class="centered">Acreditacion</th>
+                        <th class="centered">Cantidad equipos en convenio</th>
+                        <th class="centered">Cant.MP1 Años</th>
+                        <th class="centered">Proveedor</th>
+                        <th class="centered">Estado convenio</th>
+                        <th class="centered">Tipo Convenio</th>
+                        <th class="centered">Modalidad Compra</th>
+                        <th class="centered">ID Orden Compra</th>
+                        <th class="centered">Duración</th>
+                        <th class="centered">Fecha Inicio Convenio</th>
+                        <th class="centered">Fecha Termino Convenio</th>
+                        <th class="centered">Observaciones</th>                        
+                        <th class="centered">Opciones</th>                    
+                    </tr>
+                </thead>
+                <tbody id="tableBody_users"></tbody>
+           </table>
+        </div>
+    </div>
+</div>
+
+     <!--Bootstrap-->
+     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+     <!--JQuery-->
+    <script src ="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" ></script>
+    <!--Datatables-->
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
+    <!-- Custom JS-->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+     <script src="main.js"></script>
+
+</body>
+</html>

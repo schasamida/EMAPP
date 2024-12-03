@@ -1,0 +1,118 @@
+/* Contenedor principal del formulario */
+.container {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 8px;
+}
+
+/* Estilo para las pestañas de navegación */
+.nav-pills .nav-link {
+    font-weight: bold;
+    color: #007bff;
+}
+
+.nav-pills .nav-link.active {
+    background-color: #007bff;
+    color: #ffffff;
+}
+
+/* Icono de input */
+.input-group-text {
+    background-color: #f0f0f0;
+    border: none;
+}
+
+/* Estilos para los campos de formulario */
+.form-control {
+    border-radius: 0;
+}
+
+/* Checkbox y enlaces de texto */
+.form-check-label {
+    color: #6c757d;
+}
+
+.text-decoration-none {
+    color: #007bff;
+}
+
+.text-decoration-none:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+/* Estilos para el botón */
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+/* Sombra */
+.shadow-lg {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+
+#datatable_adquisiciones_wrapper .dataTable td {
+    font-size: 12px; 
+    padding: 4px; 
+    text-align: center; 
+    vertical-align: middle; 
+}
+
+#datatable_users_wrapper .dataTable td {
+    font-size: 12px; 
+    padding: 4px; 
+    text-align: center; 
+    vertical-align: middle; 
+}
+#datatable_otmc_wrapper .dataTable td {
+    font-size: 12px; 
+    padding: 4px; 
+    text-align: center; 
+    vertical-align: middle; 
+}
+#datatable_mantenciones_wrapper .dataTable td {
+    font-size: 12px; 
+    padding: 4px; 
+    text-align: center; 
+    vertical-align: middle; /
+}
+
+#datatable_equipos_wrapper .dataTable td {
+    font-size: 12px; 
+    padding: 4px; 
+    text-align: center; 
+    vertical-align: middle; 
+}
+.btn-sm.btn-primary {
+    background-color: green !important; 
+    border-color: green !important; 
+    color: white !important; 
+}
+/* Botones rojos */
+.btn-sm.btn-danger {
+    background-color: red !important; 
+    border-color: red !important; 
+    color: white !important; 
+}
+.btn-sm btn-print{
+    background-color: green !important; 
+    border-color: green !important; 
+    color: white !important; 
+
+}
+.thick-hr {
+    height: 5px; /* Grosor */
+    background-color: black; /* Color de la línea */
+    border: none; /* Sin bordes */
+    margin: 10px 0; /* Espaciado opcional */
+  }
+  .bold-centered {
+    text-align: center; /* Centra el texto */
+    font-weight: bold;  /* Pone el texto en negrita */
+  }

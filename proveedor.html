@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OT MC</title>
+    <!-- Bootstrap CSS -->
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/5e785129fd.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css"></link>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+   
+        <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">EMAPP</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarScroll">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="equipos.html">Inventario Equipos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="convenios.html">Convenios Equipos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="ordenes-trabajo.html">Ordenes de Trabajo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="adquisiciones.html">Adquisición Equipos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="ordenes-mp-mc.html">MP-MC</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="proveedor.html">Proveedores</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="informes.html">Informes</a>
+                </li>
+            </ul>
+            <!-- Mueve este elemento al lado derecho usando 'ms-auto' -->
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="./login.html">Salir</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+  </nav>
+
+
+
+    <!-- Contenido principal -->
+    <div class="container-fluid my-4">
+        <h2 class="text-center">Planilla proveedores</h2>
+
+        <!-- Botón para añadir OT MC -->
+        <div class="d-flex justify-content-between mt-3 mb-3">
+            <button class="btn btn-primary" id="add-item-btn" data-bs-toggle="modal" data-bs-target="#proveedoresModal">Añadir Proveedor</button>
+            <button class="btn btn-success" id="download-csv-proveedores">Descargar Planilla</button>
+        </div>
+
+       
+
+
+    <!-- Modal para ingreso de datos-->
+    <div class="modal fade"  id="proveedoresModal" tabindex="-1" aria-labelledby="proveedoresModalLabel" aria-hidden="true">  <!-- proveedoresModalLabel-->
+        <div class="modal-dialog modal-xl"> <!-- Clase para hacer el modal más grande -->
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-light">
+                    <h5 class="modal-title" id="proveedoresModalLabel">Agregar proveedor</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="proveedor-form">
+                        <div class="container-fluid">
+                            <div class="row g-3">
+                                <!-- Columna 1 -->
+
+
+
+                                <div class="col-md-4">
+                                    <label for="proveedor" class="form-label">Nombre proveedor</label>
+                                    <input type="text" class="form-control" id="proveedor" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="contacto" class="form-label">Contacto</label>
+                                    <input type="text" class="form-control" id="contacto" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="correo" class="form-label">Correo</label>
+                                    <input type="email" class="form-control" id="correo" required>
+                                </div>
+    
+                                    
+                                <!-- Columna 2 -->                                
+                                <div class="col-md-12">
+                                    <label for="direccion " class="form-label">Dirección</label>
+                                    <textarea class="form-control" id="direccion" rows="3"></textarea>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-center mt-4">
+                                <button id="saveproveedorButton" type="button" class="btn btn-primary" data-action="add" data-id="">Guardar</button>
+                            </div>
+
+                            
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+     <!-- Tabla de OT MC -->
+        <div class="table-responsive">
+            <table id="datatable_proveedores" class="table table-striped table-bordered">
+                <thead>
+                    <tr> 
+                        <th>ID</th>
+                        <th>Nombre Proveedor</th>
+                        <th>Contacto</th>
+                        <th>Correo</th>
+                        <th>Dirección</th>
+                        <th>Opciones</th>                       
+                    </tr>
+                </thead>
+                <tbody id="tableBody-proveedores"></tbody>
+            </table>
+        </div>
+    </div>
+
+      <!--Bootstrap-->
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+      <!--JQuery-->
+     <script src ="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" ></script>
+     <!--Datatables-->
+     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+     <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
+      <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+     <!-- Custom JS-->
+      <script src="main.js"></script>
+</body>
+</html>

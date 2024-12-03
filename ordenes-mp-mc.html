@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mantenciones</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/5e785129fd.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css"></link>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">EMAPP</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarScroll">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="equipos.html">Inventario Equipos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="convenios.html">Convenios Equipos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="ordenes-trabajo.html">Ordenes de Trabajo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="adquisiciones.html">Adquisición Equipos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="ordenes-mp-mc.html">MP-MC</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="proveedor.html">Proveedores</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="informes.html">Informes</a>
+                </li>
+            </ul>
+            <!-- Mueve este elemento al lado derecho usando 'ms-auto' -->
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="./login.html">Salir</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+  </nav>
+
+        
+<!-- Modal para ingreso de los datos de equipos medicos datos-->
+<div class="modal fade"  id="mantencionesModal" tabindex="-1" aria-labelledby="mantencionesModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl"> <!-- Clase para hacer el modal más grande -->
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-light">
+                <h5 class="modal-title" id="mantencionesModalLabel">Agresar datos a mantenimientos correctivos y preventivos</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="equipo-form">
+                    <div class="container-fluid">
+                        <div class="row g-3">
+
+                            <!-- Columna 1 -->
+                             <!-- Ingreso ID -->
+                            <div class="col-md-4">
+                                <label for="numero_sap" class="form-label">Numero SAP</label>
+                                <input type="text" class="form-control" id="numero_sap" required>
+                            </div>
+                            <!-- Ingreso Numero Orden -->
+                            <div class="col-md-4">
+                                <label for="numero_orden" class="form-label">Numero Orden</label>
+                                <input type="text" class="form-control" id="numero_orden" required>
+                            </div>
+                            <!-- Ingreso Responsable Gestion -->
+                            <div class="col-md-4">
+                                <label for="responsable_gestion" class="form-label">Responsable Gestion</label>
+                                <input type="text" class="form-control" id="responsable_gestion" required>
+                            </div>
+                            
+
+                            <!-- Columna 2 -->
+                             <!-- Ingreso Nombre equipo -->
+                            <div class="col-md-4">
+                                <label for="nombre" class="form-label">Nombre Equipo</label>
+                                <input type="text" class="form-control" id="nombre" required>
+                            </div>
+                            <!-- Ingreso Marca -->
+                            <div class="col-md-4">
+                                <label for="marca" class="form-label">Marca</label>
+                                <input type="text" class="form-control" id="marca" required>
+                            </div>
+                            <!-- Ingreso Modelo -->
+                            <div class="col-md-4">
+                                <label for="modelo" class="form-label">Modelo</label>
+                                <input type="text" class="form-control" id="modelo" required>
+                            </div>
+
+                            
+                            <!-- Columna 3 -->
+                            <!-- Ingreso Numero Serie-->
+                            <div class="col-md-4">
+                                <label for="numero_serie" class="form-label">Numero Serie</label>
+                                <input type="text" class="form-control" id="numero_serie" required>
+                            </div>
+                            <!-- Ingreso Acreditacion-->
+                            <div class="col-md-4">
+                                <label for="equipos_de_acreditacion" class="form-label">Equipo en Acreditacion</label>
+                                <select id="equipos_de_acreditacion" class="form-select">
+                                  <option selected>Elija...</option>
+                                  <option value="SI">SI</option>
+                                  <option value="NO">NO</option>
+                                  <option value="SIN INFORMACIóN">SIN INFORMACION</option>
+                                </select>
+                            </div>                         
+                            <!-- Ingreso Garantia Vigente-->
+                            <div class="col-md-4">
+                                <label for="garantia_vigente" class="form-label">Equipo en Acreditacion</label>
+                                <select id="garantia_vigente" class="form-select">
+                                  <option selected>Elija...</option>
+                                  <option value="SI">SI</option>
+                                  <option value="NO">NO</option>
+                                  <option value="SIN INFORMACION">SIN INFORMACION</option>
+                                </select>
+                            </div>
+
+
+                            <!-- Columna 4 -->
+                             <!-- Ingrese el Servicio Clinico -->
+                             <div class="col-md-4">
+                                <label for="servicio_clinico" class="form-label">Servicio Clínico</label>
+                                <select class="form-control" id="servicio_clinico" required>
+                                    <option value="" disabled selected>Seleccione...</option>
+                                    <option value="ANATOMIA_PATOLOGICA">ANATOMÍA PATOLÓGICA</option>
+                                    <option value="AREAS_COMUNES_ADULTO_INFANTIL">ÁREAS COMUNES ADULTO - INFANTIL (URGENCIA)</option>
+                                    <option value="BODEGAS_HLF">BODEGAS HLF</option>
+                                    <option value="DAIF">DAIF</option>
+                                    <option value="CENTRAL_DE_ESTERILIZACION">CENTRAL DE ESTERILIZACIÓN</option>
+                                    <option value="CRS">CRS</option>
+                                    <option value="DIRECCION_1">DIRECCIÓN 1</option>
+                                    <option value="DIRECCION_2">DIRECCIÓN 2</option>
+                                    <option value="EQUIPOS_MEDICOS">EQUIPOS MÉDICOS</option>
+                                    <option value="ESPECIALIDADES_ADULTO">ESPECIALIDADES ADULTO</option>
+                                    <option value="ESPECIALIDADES_GINECOOBSTETRICAS">ESPECIALIDADES GINECOOBSTÉTRICAS</option>
+                                    <option value="ESPECIALIDADES_PEDIATRICAS">ESPECIALIDADES PEDIÁTRICAS</option>
+                                    <option value="FARMACIA_AMBULATORIO">FARMACIA AMBULATORIO</option>
+                                    <option value="FARMACIA_HOSPITALIZADOS">FARMACIA HOSPITALIZADOS</option>
+                                    <option value="HOSPITAL_CORTA_ESTADIA_PSIQUIATRIA">HOSPITAL CORTA ESTADÍA PSIQUIATRÍA</option>
+                                    <option value="HOSPITAL_DIA_GENERAL">HOSPITAL DÍA GENERAL</option>
+                                    <option value="HOSPITAL_DIA_PSIQUIATRICO">HOSPITAL DÍA PSIQUIÁTRICO</option>
+                                    <option value="HOSPITAL_DIGITAL">HOSPITAL DIGITAL</option>
+                                    <option value="IMAGENOLOGIA">IMAGENOLOGÍA</option>
+                                    <option value="INFORMATICA">INFORMÁTICA</option>
+                                    <option value="LABORATORIO">LABORATORIO</option>
+                                    <option value="MEDICINA_FISICA_Y_REHABILITACION">MEDICINA FÍSICA Y REHABILITACIÓN</option>
+                                    <option value="NEONATOLOGIA">NEONATOLOGÍA</option>
+                                    <option value="ODONTOLOGIA">ODONTOLOGÍA</option>
+                                    <option value="OIRS">OIRS</option>
+                                    <option value="PABELLON_OBSTETRICO">PABELLÓN OBSTÉTRICO</option>
+                                    <option value="PABELLONES_CENTRALES">PABELLONES CENTRALES</option>
+                                    <option value="PENDIENTE">PENDIENTE</option>
+                                    <option value="PENSIONADO">PENSIONADO</option>
+                                    <option value="POST_PARTO">POST-PARTO</option>
+                                    <option value="PRE_PARTO">PRE-PARTO</option>
+                                    <option value="PROCEDIMIENTOS_Y_EXAMENES_BRONCOPULMONAR">PROCEDIMIENTOS Y EXÁMENES – BRONCOPULMONAR</option>
+                                    <option value="PROCEDIMIENTOS_Y_EXAMENES_CARDIOLOGIA">PROCEDIMIENTOS Y EXÁMENES - CARDIOLOGÍA</option>
+                                    <option value="PROCEDIMIENTOS_Y_EXAMENES_ENDOSCOPIAS">PROCEDIMIENTOS Y EXÁMENES - ENDOSCOPÍAS</option>
+                                    <option value="PROCEDIMIENTOS_Y_EXAMENES_FIBROBRONCOSCOPIA">PROCEDIMIENTOS Y EXÁMENES - FIBROBRONCOSCOPÍA</option>
+                                    <option value="PROCEDIMIENTOS_Y_EXAMENES_MODULO_I">PROCEDIMIENTOS Y EXÁMENES - MÓDULO I</option>
+                                    <option value="PROCEDIMIENTOS_Y_EXAMENES_MODULO_II">PROCEDIMIENTOS Y EXÁMENES - MÓDULO II</option>
+                                    <option value="PROCEDIMIENTOS_Y_EXAMENES_NEUROLOGIA">PROCEDIMIENTOS Y EXÁMENES - NEUROLOGÍA</option>
+                                    <option value="PROCEDIMIENTOS_Y_EXAMENES_OFTALMOLOGIA">PROCEDIMIENTOS Y EXÁMENES - OFTALMOLOGÍA</option>
+                                    <option value="PROCEDIMIENTOS_Y_EXAMENES_OTORRINOLARINGOLOGIA">PROCEDIMIENTOS Y EXÁMENES - OTORRINOLARINGOLOGÍA</option>
+                                    <option value="PROCEDIMIENTOS_Y_EXAMENES_TRAUMATOLOGIA">PROCEDIMIENTOS Y EXÁMENES - TRAUMATOLOGÍA, CIRUGÍA MENOR, DERMATOLOGÍA Y UROLOGÍA</option>
+                                    <option value="SALA_CUNA">SALA CUNA</option>
+                                    <option value="SEDILE">SEDILE</option>
+                                    <option value="TOMA_MUESTRAS">TOMA MUESTRAS</option>
+                                    <option value="UNIDAD_ATENCION_DOMICILIARIA">UNIDAD ATENCIÓN DOMICILIARIA</option>
+                                    <option value="UNIDAD_DE_CIRUGIA">UNIDAD DE CIRUGÍA</option>
+                                    <option value="UNIDAD_DE_CUIDADOS_MEDIOS_ADULTO">UNIDAD DE CUIDADOS MEDIOS ADULTO</option>
+                                    <option value="UNIDAD_DE_CUIDADOS_MEDIOS_ADULTO_UTI">UNIDAD DE CUIDADOS MEDIOS ADULTO (UTI 415-424)</option>
+                                    <option value="UNIDAD_DE_CUIDADOS_MEDIOS_ADULTO_UCM">UNIDAD DE CUIDADOS MEDIOS ADULTO(UCM 401-424)</option>
+                                    <option value="UNIDAD_DE_CUIDADOS_MEDIOS_INFANTIL">UNIDAD DE CUIDADOS MEDIOS INFANTIL</option>
+                                    <option value="UNIDAD_DE_LA_MUJER">UNIDAD DE LA MUJER</option>
+                                    <option value="UNIDAD_DE_MEDICINA">UNIDAD DE MEDICINA</option>
+                                    <option value="UNIDAD_DE_MEDICINA_TRANSFUSIONAL">UNIDAD DE MEDICINA TRANSFUSIONAL</option>
+                                    <option value="UNIDAD_DE_SALUD_MENTAL">UNIDAD DE SALUD MENTAL</option>
+                                    <option value="UNIDAD_MEDICO_QUIRURGICO_ADULTO">UNIDAD MEDICO QUIRÚRGICO ADULTO</option>
+                                    <option value="UNIDAD_PACIENTES_CRITICOS_ADULTO">UNIDAD PACIENTES CRÍTICOS ADULTO</option>
+                                    <option value="UNIDAD_PACIENTES_CRITICOS_INFANTIL">UNIDAD PACIENTES CRÍTICOS INFANTIL</option>
+                                    <option value="URGENCIA_ADULTO">URGENCIA ADULTO</option>
+                                    <option value="URGENCIA_INFANTIL">URGENCIA INFANTIL</option>
+                                    <option value="URGENCIA_OBSTETRICA">URGENCIA OBSTÉTRICA</option>
+                                </select>
+                            </div>  
+                            <!-- Ingrese Reeferente Clinico-->
+                            <div class="col-md-4">
+                                <label for="referente_clinico" class="form-label">Referente Clínico</label>
+                                <select class="form-control" id="referente_clinico" required>
+                                    <option value="" disabled selected>Seleccione...</option>
+                                    <option value="MARIANA_SAN_JUAN">MARIANA SAN JUAN</option>
+                                    <option value="PIA_MOLINA">PIA MOLINA</option>
+                                    <option value="MAURICIO_CANCINO">MAURICIO CANCINO</option>
+                                    <option value="MARGARET_OSORES">MARGARET OSORES</option>
+                                    <option value="MARIELA_PEREZ">MARIELA PÉREZ</option>
+                                    <option value="LUNA_MOREAU">LUNA MOREAU</option>
+                                    <option value="FRANCISCA_TREPIANA">FRANCISCA TREPIANA</option>
+                                    <option value="DANIELA_LEIVA">DANIELA LEIVA</option>
+                                    <option value="MONICA_BOLADOS">MONICA BOLADOS</option>
+                                    <option value="MARIA_DE_LOURDES_ABAITUA">MARIA DE LOURDES ABAITUA</option>
+                                    <option value="ANA_MARIA_LILLO">ANA MARIA LILLO</option>
+                                    <option value="SAMUEL_MUÑOZ">SAMUEL MUÑOZ</option>
+                                    <option value="NATALIA_ORMAZABAL">NATALIA ORMAZABAL</option>
+                                    <option value="SEBASTIAN_FRANCO">SEBASTIAN FRANCO</option>
+                                    <option value="PAULINA_BELTRAN">PAULINA BELTRAN</option>
+                                    <option value="PAULA_JIMENEZ">PAULA JIMENEZ</option>
+                                    <option value="VICTOR_FLORES">VICTOR FLORES</option>
+                                    <option value="OLGA_SAUMONT">OLGA SAUMONT</option>
+                                    <option value="VERONICA_SANDOVAL">VERONICA SANDOVAL</option>
+                                    <option value="GUACOLDA_GOMEZ">GUACOLDA GOMEZ</option>
+                                    <option value="FRANCISCA_ROJAS">FRANCISCA ROJAS</option>
+                                    <option value="ROMINA_MENARES">ROMINA MENARES</option>
+                                    <option value="MARCELA_SANTA_CRUZ">MARCELA SANTA CRUZ</option>
+                                    <option value="RUTH_MOLINA">RUTH MOLINA</option>
+                                    <option value="CLAUDIA_SILVA">CLAUDIA SILVA</option>
+                                    <option value="MARTA_YAÑEZ">MARTA YAÑEZ</option>
+                                    <option value="CLAUDIA_VALENZUELA">CLAUDIA VALENZUELA</option>
+                                    <option value="ANGELINA_GODOY">ANGELINA GODOY</option>
+                                    <option value="CLAUDIA_CANALES">CLAUDIA CANALES</option>
+                                    <option value="MACARENA_CABEZAS">MACARENA CABEZAS</option>
+                                    <option value="POLINA_FLORES">POLINA FLORES</option>
+                                    <option value="MILENA_HERNANDEZ">MILENA HERNANDEZ</option>
+                                    <option value="SUSANA_QUIROZ">SUSANA QUIROZ</option>
+                                    <option value="CAROLINA_JARA">CAROLINA JARA</option>
+                                    <option value="ROMINA_AVALOS">ROMINA AVALOS</option>
+                                    <option value="ANDREA_BLANCO">ANDREA BLANCO</option>
+                                    <option value="ELEONOR_VENEGAS">ELEONOR VENEGAS</option>
+                                </select>
+                            </div>
+                            <!-- Ingreso Fecha Generacion -->
+                            <div class="col-md-4">
+                                <label for="fecha_generacion" class="form-label">Fecha Generacion</label>
+                                <input type="date" class="form-control" id="fecha_generacion" required>
+                            </div>
+
+
+                            <!-- Columna 5 -->
+                            <!-- Ingreso Modalidad Servicio -->
+                            <div class="col-md-4">
+                                <label for="modalidad_servicio" class="form-label">Modalidad Servicio</label>
+                                <select id="modalidad_servicio" class="form-select">
+                                  <option selected>Elija...</option>
+                                  <option value="INTERNO">INTERNO</option>
+                                  <option value="EXTERNO">EXTERNO</option>
+                                  <option value="SIN INFORMACION">SIN INFORMACION</option>
+                                </select>
+                            </div>
+                            <!-- Ingreso Tipo Servicio -->
+                            <div class="col-md-4">
+                                <label for="tipo_servicio" class="form-label">Tipo Servicio</label>
+                                <select id="tipo_servicio" class="form-select">
+                                  <option selected>Elija...</option>
+                                  <option value="MANTENIMIENTO CORRECTIVO">MANTENIMIENTO CORRECTIVO</option>
+                                  <option value="MANTENIMIENTO PREVENTIVO">MANTENIMIENTO PREVENTIVO</option>
+                                  <option value="COMODATO MC">COMODATO MC</option>
+                                  <option value="COMODATO MP">COMODATO MP</option>
+                                  <option value="COBRO GARANTIA MP">COBRO GARANTIA MP</option>
+                                  <option value="COBRO GARANTIA MC">COBRO GARANTIA MC</option>
+                                  <option value="INSTALACION">INSTALACION</option>
+                                  <option value="SOLICITUD DE SERVICIO">SOLICITUD DE SERVICIO</option>
+                                  <option value="EVALUACION">EVALUACION</option>
+                                </select>
+                            </div>
+                            <!-- Ingreso Proveedor -->
+                            <div class="col-md-4">
+                                <label for="proveedor" class="form-label">Proveedor</label>
+                                <input type="text" class="form-control" id="proveedor" required>
+                            </div>
+
+
+                            <!-- Columna 6 -->
+                            <!-- Ingreso Fecha Ejecucion -->
+                            <div class="col-md-4">
+                                <label for="fecha_ejecucion" class="form-label">Fecha Ejecucion</label>
+                                <input type="date" class="form-control" id="fecha_ejecucion" required>
+                            </div>
+                            <!-- Ingreso Tipo de compra -->
+                            <div class="col-md-4">
+                                <label for="tipo_compra" class="form-label">Tipo De Compra</label>
+                                <select id="tipo_compra" class="form-select">
+                                  <option selected>Elija...</option>
+                                  <option value="TRATO DIRECTO">TRATO DIRECTO</option>
+                                  <option value="N/A">N/A</option>
+                                  <option value="MINSAL">MINSAL</option>
+                                  <option value="LICITACION">LICITACIóN</option>
+                                  <option value="SIN INFORMACION">SIN INFORMACIóN</option>
+                                </select>
+                            </div>
+                            <!-- INgreso Numero Orden -->
+                            <div class="col-md-4">
+                                <label for="numero_orden_compra" class="form-label">Numero de orden de compra</label>
+                                <input type="text" class="form-control" id="numero_orden_compra" required>
+                            </div>
+
+
+                            <!-- Columna 7 -->
+                            <!-- Ingreso Codigo Licitacion -->
+                            <div class="col-md-4">
+                                <label for="codigo_o_id_licitacion" class="form-label">Codigo o ID Licitacion</label>
+                                <input type="text" class="form-control" id="codigo_o_id_licitacion" required>
+                            </div>
+                            <!-- Costo con IVA -->
+                            <div class="col-md-4">
+                                <label for="costo_con_iva" class="form-label">Valor Neto</label>
+                                <input type="text" class="form-control" id="costo_con_iva" required>
+                            </div>
+                            <!-- Ingreso Fecha cierre OT -->
+                            <div class="col-md-4">
+                                <label for="fecha_cierre_ot" class="form-label">Fecha Cierre OT</label>
+                                <input type="date" class="form-control" id="fecha_cierre_ot" required>
+                            </div>
+
+
+                            <!-- Columna 8 -->
+                              <!-- Ingreso Descripcion -->
+                              <div class="col-md-12">
+                                <label for="descripcion" class="form-label">Descripcion</label>
+                                <textarea class="form-control" id="descripcion" rows="3"></textarea>
+                            </div>
+                             <!-- Columna Recepcion -->
+                            <div class="col-md-12">
+                                <label for="recepcion" class="form-label">Recepcion</label>
+                                <textarea class="form-control" id="recepcion" rows="3"></textarea>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center mt-4">
+                            <button id="savemantencionButton" type="submit" class="btn btn-primary" data-action="add" data-id="">Guardar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Contenido principal -->
+<div class="container-fluid my-4">
+    <h2 class="text-center"> Planilla mantenimiento correctivo - preventivo</h2>
+
+    <!-- Botón para añadir equipo -->
+    <div class="d-flex justify-content-between mt-3 mb-3">
+        <button class="btn btn-primary" id="add-item-btn" data-bs-toggle="modal" data-bs-target="#mantencionesModal">Añadir Mantenimiento</button>
+        <button class="btn btn-success" id="download-csv-mantenciones">Descargar Planilla</button>
+    </div>
+
+    <!-- Tabla de equipos mostrar-->
+    <div class="table-responsive">
+        <table id="datatable_mantenciones" class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>N° SAP</th>
+                    <th>N° orden mantencion</th>
+                    <th>Responsable gestión</th>
+                    <th>Nombre</th>
+                    <th>Marca</th>
+                    <th>Modelo</th>
+                    <th>N° Serie</th>
+                    <th>N° Inventario</th>
+                    <th>Equipo acreditación</th>
+                    <th>Garantia vigente</th>
+                    <th>Servicio clinico</th>
+                    <th>Referente clinico</th>
+                    <th>Fecha generación</th>
+                    <th>Descripción</th>
+                    <th>Modalidad servicio</th>
+                    <th>Tipo servicio</th>
+                    <th>Proveedor</th>
+                    <th>Fecha Ejecución</th>
+                    <th>Tipo de compra</th>
+                    <th>N° orden compra</th>
+                    <th>Codigo o ID licitación</th>
+                    <th>Costo con IVA</th>
+                    <th>Fecha cierre OT</th>
+                    <th>Recepción</th>
+                    <th>Opciones</th>
+                    
+                </tr>
+            </thead>
+            <tbody id="tableBody-mantenciones"></tbody>
+        </table>
+    </div>
+</div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
+    <!-- Custom JS -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
