@@ -35,72 +35,127 @@ class UsuariosController {
     }
 
     
-ingresar(req, res) { 
-    try {
-        const { nombre_usuario, email, contraseña } = req.body;
-
-        
-        bcrypt.hash(contraseña, 10, (err, hashedPassword) => {
-            if (err) {
-                return res.status(500).json({ error: "Error al cifrar la contraseña" });
+    ingresar(req, res) {
+        try {
+            const { nombre_usuario, email, contraseña, rol } = req.body;
+    
+            // Validar que el rol sea válido
+            if (!['usuario', 'admin'].includes(rol)) {
+                return res.status(400).json({ error: "Rol no válido. Debe ser 'usuario' o 'admin'." });
             }
-
-            const query = `
-                INSERT INTO usuarios (nombre_usuario, email, contraseña) 
-                VALUES (?, ?, ?);
-            `;    
-
-            // Guarda la contraseña cifrada en la base de datos
-            db.query(query, [nombre_usuario, email, hashedPassword], (err, result) => {
+    
+            bcrypt.hash(contraseña, 10, (err, hashedPassword) => {
                 if (err) {
-                    return res.status(400).json({ error: err.message });
+                    return res.status(500).json({ error: "Error al cifrar la contraseña" });
                 }
-                res.status(201).json({ id_con: result.insertId });
+    
+                const query = `
+                    INSERT INTO usuarios (nombre_usuario, email, contraseña, rol, estado) 
+                    VALUES (?, ?, ?, ?, 'pendiente');
+                `;
+    
+                db.query(query, [nombre_usuario, email, hashedPassword, rol], (err, result) => {
+                    if (err) {
+                        return res.status(400).json({ error: err.message });
+                    }
+                    res.status(201).json({ mensaje: "Usuario registrado. Pendiente de aprobación." });
+                });
             });
-        });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
     }
-}
+    
+    aprobarUsuario(req, res) {
+        const { id_r } = req.params;
+    
+        const query = `
+            UPDATE usuarios SET estado = 'aprobado' WHERE id_r = ? AND estado = 'pendiente';
+        `;
+    
+        db.query(query, [id_r], (err, result) => {
+            if (err) {
+                return res.status(500).json({ error: "Error al actualizar el estado del usuario." });
+            }
+    
+            if (result.affectedRows === 0) {
+                return res.status(404).json({ mensaje: "Usuario no encontrado o ya aprobado." });
+            }
+    
+            res.status(200).json({ mensaje: "Usuario aprobado exitosamente." });
+        });
+    }
+    
     
 
     actualizar(req, res) {
-        const { id_r } = req.params;
+        const { id_r } = req.params; // ID del usuario a actualizar
+    
         try {
-            const {nombre_usuario, email, contraseña} = req.body;
-            db.query(
-                `UPDATE usuarios SET  nombre_usuario = ?, email = ?, contraseña = ?                               
-                 WHERE id_r = ?;`               
-                ,
-                [nombre_usuario, email, contraseña, id_r],
-                (err, rows) => {
+            const { nombre_usuario, email, contraseña, rol, estado } = req.body; // Datos enviados por el cliente
+    
+            // Validar que se envíen los datos requeridos
+            if (!nombre_usuario || !email || !rol || !estado) {
+                return res.status(400).json({ error: "Todos los campos son obligatorios." });
+            }
+    
+            // Verificar si se debe actualizar la contraseña
+            if (contraseña) {
+                // Cifrar la nueva contraseña
+                bcrypt.hash(contraseña, 10, (err, hashedPassword) => {
+                    if (err) {
+                        return res.status(500).json({ error: "Error al cifrar la contraseña." });
+                    }
+    
+                    // Actualizar el usuario con la nueva contraseña
+                    const query = `
+                        UPDATE usuarios 
+                        SET nombre_usuario = ?, email = ?, contraseña = ?, rol = ?, estado = ?
+                        WHERE id_r = ?;
+                    `;
+    
+                    db.query(query, [nombre_usuario, email, hashedPassword, rol, estado, id_r], (err, rows) => {
+                        if (err) {
+                            return res.status(400).send(err);
+                        }
+                        if (rows.affectedRows == 1) {
+                            res.status(200).json({ respuesta: "Usuario actualizado con éxito." });
+                        } else {
+                            res.status(404).json({ respuesta: "Usuario no encontrado." });
+                        }
+                    });
+                });
+            } else {
+                // Actualizar el usuario sin cambiar la contraseña
+                const query = `
+                    UPDATE usuarios 
+                    SET nombre_usuario = ?, email = ?, rol = ?, estado = ?
+                    WHERE id_r = ?;
+                `;
+    
+                db.query(query, [nombre_usuario, email, rol, estado, id_r], (err, rows) => {
                     if (err) {
                         return res.status(400).send(err);
                     }
-                    if (rows.affectedRows == 1)
-                        res.status(200).json({ respuesta: 'Usuario actualizado con éxito!' });
-                    else
-                        res.status(404).json({ respuesta: 'Usuario no encontrado' });
-                }
-            );
+                    if (rows.affectedRows == 1) {
+                        res.status(200).json({ respuesta: "Usuario actualizado con éxito." });
+                    } else {
+                        res.status(404).json({ respuesta: "Usuario no encontrado." });
+                    }
+                });
+            }
         } catch (err) {
-            res.status(500).send(err.message);
+            res.status(500).send({ error: err.message });
         }
     }
 
-   
-    
     login(req, res) {
         const { nombre_usuario, contraseña } = req.body;
     
-        // Validación de campos
-        if (!nombre_usuario || !contraseña) {
-            return res.status(400).json({ error: "Todos los campos son obligatorios" });
-        }
-    
+        // Consulta SQL para buscar un usuario aprobado
         const query = `
             SELECT * FROM usuarios 
-            WHERE nombre_usuario = ? OR email = ? LIMIT 1
+            WHERE (nombre_usuario = ? OR email = ?) AND estado = 'aprobado' LIMIT 1;
         `;
     
         db.query(query, [nombre_usuario, nombre_usuario], (err, results) => {
@@ -108,14 +163,14 @@ ingresar(req, res) {
                 return res.status(500).json({ error: "Error en el servidor" });
             }
     
-            // Validar si el usuario existe
+            // Si no se encuentra el usuario o no está aprobado
             if (results.length === 0) {
-                return res.status(401).json({ error: "Usuario no encontrado" });
+                return res.status(401).json({ error: "Usuario no aprobado o no encontrado." });
             }
     
             const usuario = results[0];
     
-            // Validar la contraseña cifrada usando bcrypt.compare
+            // Comparar la contraseña cifrada
             bcrypt.compare(contraseña, usuario.contraseña, (err, isMatch) => {
                 if (err) {
                     return res.status(500).json({ error: "Error en la comparación de contraseñas" });
@@ -125,18 +180,21 @@ ingresar(req, res) {
                     return res.status(401).json({ error: "Contraseña incorrecta" });
                 }
     
-                // Respuesta exitosa si las contraseñas coinciden
+                // Respuesta exitosa
                 res.status(200).json({
                     mensaje: "Inicio de sesión exitoso",
                     usuario: {
                         id: usuario.id_r,
                         nombre_usuario: usuario.nombre_usuario,
                         email: usuario.email,
+                        rol: usuario.rol,
                     },
                 });
             });
         });
     }
+    
+    
     
 
 

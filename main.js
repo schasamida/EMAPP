@@ -39,6 +39,7 @@ const initDataTableEquipos = async () => initDataTable('datatable_equipos', list
 const initDataTableOTMC = async () => initDataTable('datatable_otmc', listOTMC);
 const initDataTableMantenciones = async () => initDataTable('datatable_mantenciones', listMantenciones);
 const initDataTableInformes = async() => initDataTable('datatable_informes', listInformes);
+const initDataTableUsuarios = async() => initDataTable('datatable_admin', listUsuarios);
 
 /**********************************************************************************/
 /*************************** Función para listar proveedor ************************/
@@ -1726,10 +1727,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 email: document.getElementById("email").value.trim(),
                 contraseña: document.getElementById("clave").value.trim(),
                 repetirContraseña: document.getElementById("repetirClave").value.trim(),
+                rol: document.getElementById("rol")?.value.trim(), // Captura el rol seleccionado
             };
 
             // Validar campos vacíos
-            if (!usuarioData.nombre_usuario || !usuarioData.email || !usuarioData.contraseña || !usuarioData.repetirContraseña) {
+            if (!usuarioData.nombre_usuario || !usuarioData.email || !usuarioData.contraseña || !usuarioData.repetirContraseña || !usuarioData.rol) {
                 alert("Todos los campos son obligatorios.");
                 return;
             }
@@ -1747,16 +1749,23 @@ document.addEventListener("DOMContentLoaded", () => {
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({
-                        nombre_usuario: usuarioData.nombre_usuario,
-                        email: usuarioData.email,
-                        contraseña: usuarioData.contraseña,
-                    }),
+                    body: JSON.stringify(usuarioData), // Enviar todos los datos del formulario
                 });
 
                 if (response.ok) {
-                    alert("¡Usuario registrado con éxito!");
+                    alert("¡Resgistro exitoso, espere a que aprueben su socilitud!");
+                    
                     document.getElementById("registerForm").reset();
+
+                    // Redirigir según el rol
+                    const data = await response.json();
+                    if (data.rol === "admin") {
+                       // window.location.href = "admin.html";
+                       console.log('¡Por favor espere a que aprueben su solicitud!');
+                    } else {
+                      //  window.location.href = "convenios.html";
+                      console.log('¡Por favor espere a que aprueben su solicitud!');
+                    }
                 } else {
                     const errorData = await response.json();
                     alert(`Error al registrarse: ${errorData.error || "Error desconocido"}`);
@@ -1769,49 +1778,55 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-/***********************************************************************************/
-/***************************** Boton Ingreso ***************************************/
+
+/*********************************************************************************/
+/***************************** Boton Login ***************************************/
 document.addEventListener("DOMContentLoaded", () => {
-    const ingresoButton = document.getElementById("ingresoButton");
+    const loginButton = document.getElementById("ingresoButton");
 
-    if (ingresoButton) {
-        ingresoButton.addEventListener("click", async (event) => {
-            event.preventDefault();
+    if (loginButton) {
+        loginButton.addEventListener("click", async (event) => {
+            event.preventDefault(); // Evita el envío del formulario por defecto
 
-          
-            const loginData = {
-                nombre_usuario: document.getElementById("loginName").value.trim(),
-                contraseña: document.getElementById("loginPassword").value.trim(),
-            };
+            // Capturar valores del formulario
+            const nombre_usuario = document.getElementById("loginName").value.trim();
+            const contraseña = document.getElementById("loginPassword").value.trim();
 
-         
-            if (!loginData.nombre_usuario || !loginData.contraseña) {
-                alert("Por favor, completa todos los campos.");
+            // Validar campos vacíos
+            if (!nombre_usuario || !contraseña) {
+                alert("Todos los campos son obligatorios.");
                 return;
             }
 
             try {
-              
-                const response = await fetch("http://localhost:3000/api/usuarios/login", {  
+                // Enviar datos al backend
+                const response = await fetch("http://localhost:3000/api/usuarios/login", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify(loginData),
+                    body: JSON.stringify({ nombre_usuario, contraseña }),
                 });
 
                 if (response.ok) {
-                    const result = await response.json();
-                    alert("¡Ingreso exitoso!");
-                    
-                    window.location.href = "convenios.html"; 
+                    const data = await response.json();
+                    alert("Inicio de sesión exitoso");
+
+                    // Redirigir según el rol
+                    if (data.usuario.rol === "admin") {
+                        window.location.href = "admin.html";
+                    } else if (data.usuario.rol === "usuario") {
+                        window.location.href = "convenios.html";
+                    } else {
+                        alert("Rol no reconocido.");
+                    }
                 } else {
                     const errorData = await response.json();
-                    alert(`Error al ingresar: ${errorData.error || "Credenciales inválidas"}`);
+                    alert(`Error: ${errorData.error}`);
                 }
             } catch (error) {
-                console.error("Error al ingresar:", error);
-                alert("Ocurrió un error al intentar iniciar sesión. Por favor, inténtalo de nuevo.");
+                console.error("Error en el inicio de sesión:", error);
+                alert("Ocurrió un error durante el inicio de sesión. Por favor, intenta nuevamente.");
             }
         });
     }
@@ -1820,6 +1835,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
+/*********************************************************************************/
 
 /*******************************************************************************************************************************/
 const listInformes = async () => {
@@ -1885,7 +1901,7 @@ const deleteInforme = async (id_trabajo) => {
 
 
 
-
+/*********************************************************************************/
 
 /*******************************************************************************************************************************/
 
@@ -1955,7 +1971,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-
+/*********************************************************************************/
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -2014,7 +2030,190 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
+/*********************************************************************************/
+/*************************** Función para listar admin ************************/
 
+
+const listUsuarios = async () => { 
+    try {
+        const response = await fetch("http://localhost:3000/api/usuarios");
+        const usuarios = await response.json();
+
+        let content = ``;
+        usuarios.forEach((usuario, id_r) => {
+            content += `
+                <tr>
+                    <td>${id_r + 1}</td>
+                    <td>${usuario.nombre_usuario}</td>
+                    <td>${usuario.email}</td>
+                    <td>${usuario.password}</td>
+                    <td>${usuario.rol}</td>
+                    <td>${usuario.estado}</td>
+                    <td>${usuario.creado_en}</td>
+                    <td>${usuario.actualizado_en}</td>
+
+                    <td>
+                    <button class="btn btn-sm btn-danger" onclick="deleteUsuarios(${usuario.id_r})"><i class="fa-solid fa-trash-can"></i></button>
+                    <button class="btn btn-sm btn-warning" onclick="editUsuario(${usuario.id_r})"><i class="fa-solid fa-pen"></i></button>
+                        
+                    </td>
+                </tr>`;
+        });
+        document.getElementById('tableBody-admin').innerHTML = content;
+    } catch (error) {
+        console.error("Error al listar usuarios:", error);
+    }
+};
+
+/**************************** Borrar usuarios ************************************/
+  
+const deleteUsuarios = async (id_r) => {
+    if (confirm("¿Estás seguro de que deseas eliminar este usuario?")) {
+        try {
+            const response = await fetch(`http://localhost:3000/api/usuarios/${id_r}`, {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" }
+            });
+
+            if (response.ok) {
+                alert("USuario eliminado con éxito!");
+                document.querySelector('#datatable_admin tbody').innerHTML = ''; 
+                await initDataTableUsuarios(); 
+            } else {
+                alert("¡Error al eliminar el usuario seleccionado!");
+            }
+        } catch (error) {
+            console.error("¡Error al eliminar el usuario:!", error);
+        }
+    }
+};
+/*
+********************************************************************************/
+/*********************************************************************************/
+/*********************************************************************************/
+
+document.addEventListener("DOMContentLoaded", () => {
+    const usuariosModal = new bootstrap.Modal(document.getElementById("adminModal")); // Modal de usuarios
+    const saveUsuariosButton = document.getElementById("saveadminButton"); // Botón de guardar/editar
+    const usuariosForm = document.getElementById("admin-form"); // Formulario de usuarios
+
+    const openAddModal = () => {
+        if(usuariosForm) usuariosForm.reset();
+        saveUsuariosButton.dataset.action = "add";
+        saveUsuariosButton.dataset.id_r = "";
+        usuariosModal.show();
+    };
+
+    // Función para abrir el modal en modo editar
+    window.editUsuario = async (id_r) => {
+        if (!id_r) {
+            alert("ID del usuario no válido.");
+            return;
+        }
+    
+        console.log("Cargando datos para el usuario con ID:", id_r); // Log para depuración
+    
+        try {
+            const response = await fetch(`http://localhost:3000/api/usuarios/${id_r}`);
+            if (!response.ok) throw new Error("No se pudo obtener el usuario.");
+    
+            const data = await response.json();
+            console.log("Datos del usuario obtenidos:", data); // Log para depuración
+    
+            // Extraer el primer elemento del array
+            const usuario = Array.isArray(data) ? data[0] : data;
+    
+            if (!usuario) {
+                throw new Error("El usuario no existe o no se obtuvo correctamente.");
+            }
+    
+            if (usuariosForm) usuariosForm.reset();
+    
+            // Asignar valores al formulario
+            document.getElementById("nombre_usuario").value = usuario.nombre_usuario || "";
+            document.getElementById("email").value = usuario.email || "";
+            document.getElementById("rol").value = usuario.rol || "";
+            document.getElementById("estado").value = usuario.estado || "";
+    
+            saveUsuariosButton.dataset.action = "edit";
+            saveUsuariosButton.dataset.id_r = id_r;
+    
+            console.log("Datos asignados al formulario, mostrando modal...");
+            usuariosModal.show();
+        } catch (error) {
+            console.error("Error al cargar los datos del usuario:", error);
+            alert("No se pudo cargar los datos del usuario.");
+        }
+    };
+    
+    
+
+    // Función para manejar guardar o editar
+    const handleSaveOrEdit = async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const action = saveUsuariosButton.dataset.action;
+        const id_r = saveUsuariosButton.dataset.id_r;
+
+        const usuarioData = {
+            nombre_usuario: document.getElementById("nombre_usuario").value.trim(),
+            email: document.getElementById("email").value.trim(),
+            rol: document.getElementById("rol").value.trim(),
+            estado: document.getElementById("estado").value.trim(),
+        };
+
+        if (!usuarioData.nombre_usuario || !usuarioData.email || !usuarioData.rol || !usuarioData.estado) {
+            alert("Por favor, completa todos los campos obligatorios.");
+            return;
+        }
+
+        try {
+            let response;
+            if (action === "edit" && id_r) {
+                // Solicitud PUT para editar
+                response = await fetch(`http://localhost:3000/api/usuarios/${id_r}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(usuarioData),
+                });
+            }
+
+            if (response.ok) {
+                alert("Operación realizada con éxito.");
+                usuariosModal.hide(); // Cerrar modal
+                usuariosForm.reset(); // Reiniciar formulario
+                window.location.reload(); // Recargar la página para actualizar la tabla
+            } else {
+                const errorData = await response.json();
+                alert(`Error: ${errorData.message || "Error desconocido"}`);
+            }
+        } catch (error) {
+            console.error("Error al guardar o editar el usuario:", error);
+        }
+    };
+
+    // Reiniciar formulario y limpiar atributos del botón al cerrar el modal
+    document.getElementById("adminModal").addEventListener("hidden.bs.modal", () => {
+        usuariosForm.reset();
+        saveUsuariosButton.dataset.action = "";
+        saveUsuariosButton.dataset.id_r = "";
+    });
+
+    // Evento para manejar guardar o editar usuario
+    saveUsuariosButton.addEventListener("click", handleSaveOrEdit);
+});
+
+
+
+
+
+
+
+
+
+
+/*********************************************************************************/
 // Carga inicial de tablas según la página actual
 window.addEventListener("load", async () => {
     const isProveedoresPage = document.getElementById('datatable_proveedores');
@@ -2024,6 +2223,7 @@ window.addEventListener("load", async () => {
     const isOTMCPage = document.getElementById('datatable_otmc');
     const isMantencionesPage = document.getElementById('datatable_mantenciones');
     const isInformesPage = document.getElementById('datatable_informes');
+    const isUsuariosPage = document.getElementById('datatable_admin');
 
     if (isProveedoresPage) {
         await initDataTableProveedores();
@@ -2039,6 +2239,8 @@ window.addEventListener("load", async () => {
         await initDataTableMantenciones();
     } else if (isInformesPage){
         await initDataTableInformes();
+    } else if(isUsuariosPage){
+        await initDataTableUsuarios();
     }
 });
 

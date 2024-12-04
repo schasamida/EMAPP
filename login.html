@@ -75,59 +75,91 @@
                 <!-- Email input -->
                 <div class="input-group mb-3">
                     <span class="input-group-text"><i class="fas fa-user"></i></span>
-                    <input type="registroEmail" id="loginName" class="form-control" placeholder="Email o Nombre de usuario" />
+                    <input type="text" id="loginName" class="form-control" placeholder="Email o Nombre de usuario" />
                 </div>
-
                 <div class="input-group mb-3">
                     <span class="input-group-text"><i class="fas fa-lock"></i></span>
                     <input type="password" id="loginPassword" class="form-control" placeholder="Contraseña" />
                 </div>
-               
-                <!-- Botón de inicio de sesión -->
-                <div class="d-grid">
-                    <button id="ingresoButton" type="submit" class="btn btn-primary w-100">Ingresar</button>
-                </div>
-            </form>
-        </div>
-
-
-
-
-                <!-- Formulario de registro -->
-        <div class="tab-pane fade" id="pills-register" role="tabpanel" aria-labelledby="tab-register">
-            <form id="registerForm">
-                <p class="text-center mb-4 fw-bold">Completa el siguiente formulario:</p>
-
-                <!-- Nombre de usuario -->
-                <div class="input-group mb-3">
-                    <span class="input-group-text"><i class="fas fa-user-plus"></i></span>
-                    <input type="text" id="usuario" class="form-control" placeholder="Nombre de Usuario" required />
+                <button id="ingresoButton" type="submit" class="btn btn-primary w-100">Ingresar</button>
                 </div>
 
-                <!-- Email -->
-                <div class="input-group mb-3">
-                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                    <input type="email" id="email" class="form-control" placeholder="Email" required />
+
+                        <!-- Formulario de registro -->
+                <div class="tab-pane fade" id="pills-register" role="tabpanel" aria-labelledby="tab-register">
+                    <form id="registerForm">
+                        <p class="text-center mb-4 fw-bold">Completa el siguiente formulario:</p>
+
+                        <!-- Nombre de usuario -->
+                        <div class="input-group mb-3">
+                            <span class="input-group-text"><i class="fas fa-user-plus"></i></span>
+                            <input type="text" id="usuario" class="form-control" placeholder="Nombre de Usuario" required />
+                        </div>
+
+                        <!-- Email -->
+                        <div class="input-group mb-3">
+                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            <input type="email" id="email" class="form-control" placeholder="Email" required />
+                        </div>
+
+                        <!-- Contraseña -->
+                        <div class="input-group mb-3">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            <input type="password" id="clave" class="form-control" placeholder="Contraseña" required />
+                        </div>
+
+                        <!-- Repetir contraseña -->
+                        <div class="input-group mb-3">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            <input type="password" id="repetirClave" class="form-control" placeholder="Repetir Contraseña" required />
+                        </div>
+                        <!-- Selector de rol -->
+                        <div class="input-group mb-3">
+                            <label class="input-group-text" for="rol"><i class="fas fa-user-tag"></i></label>
+                            <select id="rol" class="form-select" required>
+                                <option value="" selected disabled>Selecciona tu Rol</option>
+                                <option value="usuario">Usuario</option>
+                                <option value="admin">Administrador</option>
+                            </select>
+                        </div>
+                        
+
+                        <!-- Botón de registro -->
+                        <button id="registroButton" type="submit" class="btn btn-primary w-100">Registrarse</button>
+                    </form>
                 </div>
 
-                <!-- Contraseña -->
-                <div class="input-group mb-3">
-                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                    <input type="password" id="clave" class="form-control" placeholder="Contraseña" required />
+
+
+
+
+                <div class="text-center mt-3">
+                    <a href="#pills-recover" class="text-decoration-none" data-bs-toggle="pill">¿Olvidaste tu contraseña?</a>
                 </div>
-
-                <!-- Repetir contraseña -->
-                <div class="input-group mb-3">
-                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                    <input type="password" id="repetirClave" class="form-control" placeholder="Repetir Contraseña" required />
-                </div>
-
-                <!-- Botón de registro -->
-                <button id="registroButton" type="submit" class="btn btn-primary w-100">Registrarse</button>
-            </form>
-        </div>
-
         
+
+
+                <!-- Formulario de Recuperación de Contraseña -->
+                <div class="tab-pane fade" id="pills-recover" role="tabpanel" aria-labelledby="tab-recover">
+                    <form id="recoverForm">
+                        <p class="text-center mb-4 fw-bold">Recuperar tu contraseña</p>
+
+                        <!-- Email -->
+                        <div class="input-group mb-3">
+                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            <input type="email" id="recoverEmail" class="form-control" placeholder="Email registrado" required />
+                        </div>
+
+                        <!-- Botón de recuperación -->
+                        <button id="recoverButton" type="submit" class="btn btn-primary w-100">Enviar Enlace de Recuperación</button>
+                    </form>
+                </div>
+
+                    
+                </form>
+            </div>
+
+
     <!-- Scripts -->
     <script>
         $(document).ready(function () {
